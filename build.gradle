@@ -19,13 +19,28 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		compileOnly 'org.projectlombok:lombok'
+		runtimeOnly 'com.h2database:h2'
+		runtimeOnly 'mysql:mysql-connector-java'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+		implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.3'
+		implementation 'org.json:json:20210307'
+
+		// 스프링 시큐리티
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		// Thymeleaf (뷰 템플릿 엔진)
+		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+		// Thymeleaf 에서 springsecurity 의존성 설정
+		implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+		///////////////////////////////////////////////////////////////////////
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	}
 }
 
 tasks.named('test') {

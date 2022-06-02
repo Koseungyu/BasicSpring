@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,39 +10,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <!--    font-family: 'Jua', sans-serif;-->
     <script>
+        $(document).ready(function () {
+            usercheck();
+        })
 
+        function usercheck() {
+            $.ajax({
+                type: "GET",
+                url: "/api/usercheck",
+                success: function (response) {
+                    let usercheck = response;
+                    if (usercheck == ""){
+                        alert('로그인이 필요합니다>_<')
+                        window.location.replace("/user/login")
+                    }
+                }
+            });
+        }
         function isValidContents(contents) {
             if (contents == '') {
-                alert('모든 기입란에 입력해주세요');
-                return false;
-            }
-            if (contents.trim().length > 140) {                //trim()은 앞 뒤 공백은 제외하고 길이로 봤을때 140 이내의 글자만 쓸수있게함.
-                alert('공백 포함 140자 이하로 입력해주세요');
+                alert('내용을 입력해주세요');
                 return false;
             }
             return true;
         }
 
-
         function writePost() {
             let contents = $('#contents').val();
-            let username = $('#username').val();
             let title = $('#title').val();
-            let password = $('#password').val();
             if (isValidContents(contents) == false) {
-                return;
-            }
-            if (isValidContents(username) == false) {
                 return;
             }
             if (isValidContents(title) == false) {
                 return;
             }
-            if (isValidContents(password) == false) {
-                return;
-            }
 
-            let data = {'title': title, 'username': username, 'password': password, 'contents': contents};
+            let data = {'title': title, 'contents': contents};
             $.ajax({
                 type: "POST",
                 url: "/api/memos",
@@ -53,14 +56,15 @@
                     location.href = 'index.html';
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
+                    alert('로그인을 해주세요');
+                    window.location.replace("/user/login");
                 }
             });
         }
     </script>
 
     <style>
+        /*@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);*/
         * {
             font-family: 'Jua', sans-serif !important;
         }
@@ -117,10 +121,11 @@
 
 
         .header {
-            margin-top: 170px;
+            margin-top: 0;
         }
 
         .header h2 {
+            /*font-family: 'Noto Sans KR', sans-serif;*/
             height: 33px;
             font-size: 42px;
             font-weight: 500;
@@ -172,10 +177,65 @@
             color: #868e96;
         }
 
+        .card .metadata {
+            position: relative;
+            display: flex;
+            font-family: 'Spoqa Han Sans';
+            font-size: 11px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: -0.77px;
+            text-align: left;
+            color: #adb5bd;
+            height: 14px;
+            padding: 10px 23px;
+        }
+
+        .card .metadata .date {
+
+        }
+
+        .card .metadata .name {
+            margin-left: 20px;
+        }
+
+        .contents div.edit {
+            display: none;
+        }
+
+        .contents textarea.te-edit {
+            border-right: none;
+            border-top: none;
+            border-left: none;
+            resize: none;
+            border-bottom: 1px solid #212529;
+            width: 100%;
+            font-family: 'Spoqa Han Sans';
+        }
+
         .form-control {
             height: 30px;
             margin-bottom: 10px;
-            margin-left: 70px;
+            margin-left: 35px;
+            border-radius: 10px;
+        }
+
+        #logout-text, #login-text, #signup-text {
+            text-decoration: none;
+            color: #FFA547;
+            display: block;
+            text-align: right;
+            font-size: 30px;
+        }
+        #home{
+            text-decoration: none;
+            color: #FFA547;
+            display: inline;
+            text-align: right;
+            font-size: 30px;
+            position: absolute;
         }
     </style>
 </head>
@@ -186,7 +246,10 @@
 <div class="background-body">
 
 </div>
-<a href="/" id="home">홈으로가기</a>
+<a href="/index.html" id="home">홈으로가기</a>
+<a sec:authorize="isAuthenticated()" id="logout-text" href="/user/logout">
+    로그아웃
+</a>
 <div class="wrap">
     <div class="header">
         <h2>평화기원 메시지를 남겨주세요!</h2>
@@ -194,9 +257,6 @@
     <div class="area-write">
         <div class="form-floating mb-3">
             <input type="title" class="form-control" id="title" placeholder="제목">
-            <input type="username" class="form-control" id="username" placeholder="이름">
-            <input type="password" class="form-control" id="password" placeholder="비밀번호">
-
         </div>
         <textarea class="field" placeholder="평화기원 메시지를 남겨주세요" name="contents" id="contents" cols="30"
                   rows="10"></textarea>

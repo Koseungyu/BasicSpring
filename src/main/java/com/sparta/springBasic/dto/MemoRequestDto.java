@@ -1,15 +1,14 @@
-package com.sparta.springBasic.domain;
+package com.sparta.springBasic.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-//@Setter
+@Setter
 public class MemoRequestDto {
     private String title;
     private String username;
     private String contents;
-    private String password;
 }
 
 

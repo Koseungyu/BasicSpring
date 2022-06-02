@@ -1,5 +1,6 @@
-package com.sparta.springBasic.domain;
+package com.sparta.springBasic.model;
 
+import com.sparta.springBasic.dto.MemoRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,30 +19,39 @@ public class Memo extends Timestamped { // 생성,수정 시간을 자동으로 
     private String username;
     @Column(nullable = false)
     private String contents;
-    @Column(nullable = false)
-    private String password;
 
 
-//    public Memo(String title, String username, String contents, String password) {
-//        this.title = title;
-//        this.username = username;
-//        this.contents = contents;
-//        this.password = password;
-//    }
+
+    public Memo(String title, String username, String contents) {
+        this.title = title;
+        this.username = username;
+        this.contents = contents;
+    }
 
     //게시글 작성
     public Memo(MemoRequestDto requestDto) {
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
+        this.username = requestDto.getUsername();
+    }
+
+    public Memo(MemoRequestDto requestDto, String username) {
+        this.title = requestDto.getTitle();
+        this.username = username;
+        this.contents = requestDto.getContents();
     }
 
     //게시글 수정
     public void update(MemoRequestDto requestDto) {
-//        this.title = requestDto.getTitle();
-//        this.username = requestDto.getUsername();
+        this.title = requestDto.getTitle();
+        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
+    }
+
+
+    public Memo(MemoRequestDto requestDto, String username, String contents) {
+        this.title = requestDto.getTitle();
+        this.username = username;
+        this.contents = contents;
     }
 }

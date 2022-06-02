@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -45,7 +46,7 @@
             return `<a href="detail.html?id=${id}">
                         <div class="card">
                             <div class="metadata">
-                               <div id="${id}-name" class="name">
+                               <div "${id}-name" class="name">
                                    ${username}
                                </div>
                                <div class="date">
@@ -112,10 +113,11 @@
         }
 
         .header {
-            margin-top: 170px;
+            margin-top: 70px;
         }
 
         .header h2 {
+            /*font-family: 'Noto Sans KR', sans-serif;*/
             height: 33px;
             font-size: 42px;
             font-weight: 500;
@@ -125,7 +127,7 @@
             letter-spacing: -0.5px;
             text-align: center;
             color: #ffffff;
-            margin-top: 100px;
+            margin-top: 40px;
         }
 
         .header p {
@@ -208,6 +210,14 @@
             text-decoration: none;
             color: #000000;
         }
+
+        #logout-text, #login-text, #signup-text {
+            text-decoration: none;
+            color: #FFE400;
+            display: block;
+            text-align: right;
+            font-size: 30px;
+        }
     </style>
 </head>
 
@@ -219,10 +229,24 @@
 </div>
 <div class="wrap">
     <div class="header">
-        <h2>평화 기원 게시판</h2>
+        <a sec:authorize="isAuthenticated()" id="logout-text" href="/user/logout">
+            로그아웃
+        </a>
+        <a sec:authorize="!isAuthenticated()" id="login-text" href="/user/login">
+            로그인
+        </a>
+        <a sec:authorize="!isAuthenticated()" id="signup-text" href="/user/signup">
+            회원가입
+        </a>
+        <h2>평화 기원 게시판<br><br>
+            <li sec:authorize="isAuthenticated()"><span th:text="${username}"></span> 님,<br><br></li>
+            평화 메시지를 남겨주세요.
+        </h2>
     </div>
     <div class="to-write">
+        <li sec:authorize="isAuthenticated()">
         <button type="button" class="btn btn-primary" onclick="location.href='write.html'"><b>글쓰러가기</b></button>
+        </li>
     </div>
     <div id="cards-box" class="area-read">
         <div class="card">
@@ -239,13 +263,10 @@
                 <div id="1-contents" class="text">
                     dsafnkalfklewakflekelafkleajfkleafkldsankflenwaklfnekwlafneklwanfkelawnfkelanfkleanfklew
                 </div>
-                <div id="1-editarea" class="edit">
-                    <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
-                </div>
             </div>
-
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>
